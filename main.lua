@@ -57,7 +57,7 @@ function love.load()
     for i = 1, Obstacles.count do
         local quad = love.graphics.newQuad((i - 1) * tileWidth, 0, tileWidth, tileHeight, Obstacles.sprite:getWidth(), Obstacles.sprite:getHeight())
         local width, height = Obstacles.defaultWidth, Obstacles.defaultHeight
-        local x, y = love.graphics.getWidth() / Settings.scale - i * Obstacles.spacing, Ground.y - height
+        local x, y = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing, Ground.y - height
         local obstacle = {
             x = x, y = y, width = width, height = height, quad = quad
         }
