@@ -12,7 +12,8 @@ local Settings = {
 local Player = {
     isJumping = false,
     canJump = false,
-    x = 20,
+    score = 0,
+    x = 40,
     y = 0,
     width = 16,
     height = 32,
@@ -76,11 +77,18 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.scale(Settings.scale)
     love.graphics.setColor(255, 255, 255)
+
+    love.graphics.print("Score: " .. Player.score, 10, 10)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
+
+    love.graphics.scale(Settings.scale)
+
     Player.animation:draw(Player.sprite, Player.x, Player.y)
+
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
+
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
 end
