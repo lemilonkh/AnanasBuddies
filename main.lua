@@ -2,6 +2,7 @@
 -- (c) 2018 by Milan Gruner
 
 local bump = require "libs.bump"
+local anim8 = require "libs.anim8"
 
 local Settings = {
     scale = 4,
@@ -29,16 +30,21 @@ local Ground = {
 }
 
 function love.load()
+    Player.sprite = love.graphics.newImage("sprites/pineapple.png")
+    local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
+    Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1)
+
     Ground.width = love.graphics.getWidth()
     Ground.height = love.graphics.getHeight() / 2
     Ground.y = Ground.height
-    Player.sprite = love.graphics.newImage("sprites/pineapple.png")
+
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
 end
 
 function love.update(dt)
+    Player.animation:update(dt)
     Player.velocityY = Player.velocityY + Player.gravity * dt
 
     if Player.velocityY > Player.maxFallVelocity then
@@ -61,7 +67,7 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.draw(Player.sprite, Player.x, Player.y)
+    Player.animation:draw(Player.sprite, Player.x, Player.y)
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
     love.graphics.setColor(0, 255, 128)
