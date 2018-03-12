@@ -28,7 +28,7 @@ function love.load()
     Ground.width = love.graphics.getWidth()
     Ground.height = love.graphics.getHeight() / 2
     Ground.y = Ground.height
-    --Player.sprite = love.graphics.loadImage("sprites/ananas.png")
+    Player.sprite = love.graphics.newImage("sprites/pineapple.png")
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
@@ -47,17 +47,17 @@ function love.update(dt)
     Player.x, Player.y = actualX, actualY
 
     for i = 1, #collisions do
-        print("Collision")
         local collision = collisions[i]
         if collision.other.isGround then
             Player.canJump = true
             Player.isJumping = false
+            Player.velocityY = 0
         end
     end
 end
 
 function love.draw()
-    --love.graphics.draw(Player.sprite, Player.x, Player.y)
+    love.graphics.draw(Player.sprite, Player.x, Player.y)
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
     love.graphics.setColor(0, 255, 128)
