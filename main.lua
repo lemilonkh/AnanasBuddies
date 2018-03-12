@@ -73,6 +73,10 @@ function love.update(dt)
     for i = 1, #Obstacles do
         local obstacle = Obstacles[i]
         obstacle.x = obstacle.x + Obstacles.velocityX * dt
+
+        if obstacle.x < -obstacle.width then
+            obstacle.x = love.graphics.getWidth() / Settings.scale + obstacle.width
+        end
     end
 
     Player.animation:update(dt)
