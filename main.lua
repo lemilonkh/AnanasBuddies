@@ -6,7 +6,8 @@ local anim8 = require "libs.anim8"
 
 local Settings = {
     scale = 4,
-    groundY = 300
+    groundY = 300,
+    backgroundColor = {28, 112, 167}
 }
 
 local Player = {
@@ -77,6 +78,7 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.setBackgroundColor(Settings.backgroundColor)
     love.graphics.setColor(255, 255, 255)
 
     love.graphics.print("Score: " .. Player.score, 10, 10)
