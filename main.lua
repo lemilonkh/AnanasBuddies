@@ -45,6 +45,12 @@ end
 
 function love.update(dt)
     Player.animation:update(dt)
+    if Player.isJumping then
+        Player.animation:pauseAtStart()
+    else
+        Player.animation:resume()
+    end
+
     Player.velocityY = Player.velocityY + Player.gravity * dt
 
     if Player.velocityY > Player.maxFallVelocity then
