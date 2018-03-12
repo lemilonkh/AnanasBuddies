@@ -34,6 +34,7 @@ local Ground = {
 }
 
 local Obstacles = {
+    velocityX = -40,
     count = 2,
     defaultWidth = 16,
     defaultHeight = 16,
@@ -66,6 +67,11 @@ function love.load()
 end
 
 function love.update(dt)
+    for i = 1, #Obstacles do
+        local obstacle = Obstacles[i]
+        obstacle.x = obstacle.x + Obstacles.velocityX * dt
+    end
+
     Player.animation:update(dt)
     if Player.isJumping then
         Player.animation:pauseAtStart()
