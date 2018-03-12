@@ -1,6 +1,8 @@
 -- main.lua
 -- (c) 2018 by Milan Gruner
 
+local bump = require "libs.bump"
+
 local groundY = 300
 
 local Player = {
