@@ -12,7 +12,7 @@ local Settings = {
 local Player = {
     isJumping = false,
     canJump = false,
-    x = 50,
+    x = 20,
     y = 0,
     width = 16,
     height = 32,
@@ -31,12 +31,14 @@ local Ground = {
 }
 
 function love.load()
+    love.graphics.setDefaultFilter("nearest", "nearest", 1)
+
     Player.sprite = love.graphics.newImage("sprites/pineapple.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
     Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1)
 
-    Ground.width = love.graphics.getWidth()
-    Ground.height = love.graphics.getHeight() / 2
+    Ground.width = love.graphics.getWidth()  / Settings.scale
+    Ground.height = love.graphics.getHeight() / (2 * Settings.scale)
     Ground.y = Ground.height
 
     bumpWorld = bump.newWorld()
@@ -74,6 +76,8 @@ function love.update(dt)
 end
 
 function love.draw()
+    love.graphics.scale(Settings.scale)
+    love.graphics.setColor(255, 255, 255)
     Player.animation:draw(Player.sprite, Player.x, Player.y)
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
