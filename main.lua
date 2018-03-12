@@ -25,6 +25,7 @@ local Player = {
 
 local Ground = {
     isGround = true,
+    color = {247, 160, 59},
     x = 0,
     y = 0
 }
@@ -76,8 +77,8 @@ function love.draw()
     Player.animation:draw(Player.sprite, Player.x, Player.y)
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
-    love.graphics.setColor(0, 255, 128)
-    love.graphics.rectangle("line", Ground.x, Ground.y, Ground.width, Ground.height)
+    love.graphics.setColor(Ground.color)
+    love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
 end
 
 function love.keypressed(key)
