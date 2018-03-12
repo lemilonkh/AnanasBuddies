@@ -35,6 +35,7 @@ local Ground = {
 
 local Obstacles = {
     velocityX = -40,
+    spacing = 60,
     count = 2,
     defaultWidth = 16,
     defaultHeight = 16,
@@ -42,6 +43,10 @@ local Obstacles = {
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+
+    Ground.width = love.graphics.getWidth()  / Settings.scale
+    Ground.height = love.graphics.getHeight() / (2 * Settings.scale)
+    Ground.y = Ground.height
 
     Player.sprite = love.graphics.newImage("sprites/pineapple.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
@@ -51,15 +56,13 @@ function love.load()
     local tileWidth, tileHeight = 16, 16
     for i = 1, Obstacles.count do
         local quad = love.graphics.newQuad((i - 1) * tileWidth, 0, tileWidth, tileHeight, Obstacles.sprite:getWidth(), Obstacles.sprite:getHeight())
+        local width, height = Obstacles.defaultWidth, Obstacles.defaultHeight
+        local x, y = love.graphics.getWidth() / Settings.scale - i * Obstacles.spacing, Ground.y - height
         local obstacle = {
-            x = i * 32, y = 32, width = Obstacles.defaultWidth, height = Obstacles.defaultHeight, quad = quad
+            x = x, y = y, width = width, height = height, quad = quad
         }
         table.insert(Obstacles, obstacle)
     end
-
-    Ground.width = love.graphics.getWidth()  / Settings.scale
-    Ground.height = love.graphics.getHeight() / (2 * Settings.scale)
-    Ground.y = Ground.height
 
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
