@@ -12,6 +12,7 @@ local Settings = {
 }
 
 local Player = {
+    isPlayer = true,
     isJumping = false,
     canJump = false,
     score = 0,
@@ -52,6 +53,10 @@ function love.load()
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
     Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1)
 
+    bumpWorld = bump.newWorld()
+    bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
+    bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
+
     Obstacles.sprite = love.graphics.newImage("sprites/obstacles.png")
     local tileWidth, tileHeight = 16, 16
     for i = 1, Obstacles.count do
@@ -59,14 +64,15 @@ function love.load()
         local width, height = Obstacles.defaultWidth, Obstacles.defaultHeight
         local x, y = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing, Ground.y - height
         local obstacle = {
-            x = x, y = y, width = width, height = height, quad = quad
+            x = x, y = y, width = width, height = height, quad = quad, isObstacle = true
         }
+        bumpWorld:add(obstacle, x, y, width, height)
         table.insert(Obstacles, obstacle)
     end
+end
 
-    bumpWorld = bump.newWorld()
-    bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
-    bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
+local function gameOver()
+    print("Game over!")
 end
 
 function love.update(dt)
@@ -76,6 +82,15 @@ function love.update(dt)
 
         if obstacle.x < -obstacle.width then
             obstacle.x = love.graphics.getWidth() / Settings.scale + obstacle.width
+        end
+
+        local actualX, actualY, collisions = bumpWorld:move(obstacle, obstacle.x, obstacle.y)
+        obstacle.x, obstacle.y = actualX, actualY
+
+        for i = 1, #collisions do
+            if collisions[i].other.isPlayer then
+                gameOver()
+            end
         end
     end
 
@@ -103,6 +118,8 @@ function love.update(dt)
             Player.canJump = true
             Player.isJumping = false
             Player.velocityY = 0
+        elseif collision.other.isObstacle then
+            gameOver()
         end
     end
 end
