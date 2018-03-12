@@ -1,6 +1,7 @@
 -- main.lua
 -- (c) 2018 by Milan Gruner
 
+inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
 
@@ -32,12 +33,28 @@ local Ground = {
     y = 0
 }
 
+local Obstacles = {
+    count = 2,
+    defaultWidth = 16,
+    defaultHeight = 16,
+}
+
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
     Player.sprite = love.graphics.newImage("sprites/pineapple.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
     Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1)
+
+    Obstacles.sprite = love.graphics.newImage("sprites/obstacles.png")
+    local tileWidth, tileHeight = 16, 16
+    for i = 1, Obstacles.count do
+        local quad = love.graphics.newQuad((i - 1) * tileWidth, 0, tileWidth, tileHeight, Obstacles.sprite:getWidth(), Obstacles.sprite:getHeight())
+        local obstacle = {
+            x = i * 32, y = 32, width = Obstacles.defaultWidth, height = Obstacles.defaultHeight, quad = quad
+        }
+        table.insert(Obstacles, obstacle)
+    end
 
     Ground.width = love.graphics.getWidth()  / Settings.scale
     Ground.height = love.graphics.getHeight() / (2 * Settings.scale)
@@ -85,6 +102,10 @@ function love.draw()
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
     love.graphics.scale(Settings.scale)
+
+    for index, obstacle in ipairs(Obstacles) do
+        love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
+    end
 
     Player.animation:draw(Player.sprite, Player.x, Player.y)
 
