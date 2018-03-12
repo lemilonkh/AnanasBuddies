@@ -3,25 +3,29 @@
 
 local bump = require "libs.bump"
 
-local groundY = 300
+local Settings = {
+    scale = 4,
+    groundY = 300
+}
 
 local Player = {
     isJumping = false,
     canJump = false,
-    x = 0,
+    x = 50,
     y = 0,
     width = 16,
     height = 32,
-    velocityX = 50,
+    velocityX = 0,
     velocityY = 0,
-    jumpVelocity = 10,
-    gravity = 50
+    jumpVelocity = 200,
+    gravity = 200,
+    maxFallVelocity = 800
 }
 
 local Ground = {
     isGround = true,
     x = 0,
-    y = groundY
+    y = 0
 }
 
 function love.load()
@@ -37,7 +41,7 @@ end
 function love.update(dt)
     Player.velocityY = Player.velocityY + Player.gravity * dt
 
-    if Player.velocityY > Player.gravity then
+    if Player.velocityY > Player.maxFallVelocity then
         Player.velocityY = Player.gravity
     end
 
@@ -61,7 +65,7 @@ function love.draw()
     love.graphics.setColor(255, 0, 0)
     love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
     love.graphics.setColor(0, 255, 128)
-    love.graphics.rectangle("line", 0, groundY, love.graphics.getWidth(), love.graphics.getHeight() - groundY)
+    love.graphics.rectangle("line", Ground.x, Ground.y, Ground.width, Ground.height)
 end
 
 function love.keypressed(key)
