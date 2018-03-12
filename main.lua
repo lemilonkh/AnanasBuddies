@@ -19,8 +19,8 @@ local Player = {
     velocityX = 0,
     velocityY = 0,
     jumpVelocity = 200,
-    gravity = 200,
-    maxFallVelocity = 800
+    gravity = 400,
+    maxFallVelocity = 1200
 }
 
 local Ground = {
