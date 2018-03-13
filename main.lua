@@ -10,6 +10,8 @@ local util = require "util.util"
 local ProgressBar = require "ui.ProgressBar"
 local Background = require "fx.Background"
 local SoundManager = require "util.SoundManager"
+local Settings = require "data.Settings"
+require "data.Entities"
 
 local mobile = false
 local noise
@@ -20,53 +22,6 @@ else
 end
 
 local isRunning = true
-
-local Settings = {
-    debugDraw = false,
-    scale = 2,
-    groundY = 300,
-    backgroundColor = {28, 112, 167},
-    backgroundSpeed = 4,
-    scoreMultiplier = 1, -- points per second
-    pickupStamina = 0.1,
-    noiseSeed = 42,
-    maxNoiseAlpha = 128,
-}
-
-local Player = {
-    isPlayer = true,
-    isJumping = false,
-    canJump = false,
-    hasLanded = true,
-    score = 0,
-    x = 40,
-    y = 0,
-    width = 32,
-    height = 64,
-    velocityX = 0,
-    velocityY = 0,
-    jumpVelocity = 250,
-    gravity = 600,
-    maxFallVelocity = 1400,
-    health = 3,
-    stamina = 0
-}
-
-local Ground = {
-    isGround = true,
-    color = {247, 160, 59},
-    x = 0,
-    y = 0
-}
-
-local Obstacles = {
-    velocityX = -120,
-    spacing = 120,
-    count = 2,
-    pickupCount = 20,
-    defaultWidth = 16,
-    defaultHeight = 16,
-}
 
 local staminaBar, background, soundManager, noiseShader, noiseTimer
 
