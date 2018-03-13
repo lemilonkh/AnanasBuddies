@@ -7,6 +7,7 @@ local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
 
 local ProgressBar = require "ui.ProgressBar"
+local Background = require "fx.Background"
 
 local isRunning = true
 
@@ -48,7 +49,11 @@ local Obstacles = {
     defaultHeight = 16,
 }
 
-local staminaBar
+local staminaBar, background
+
+local function getScreenSize()
+    return love.graphics.getWidth() / Settings.scale, love.graphics.getHeight() / Settings.scale
+end
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
@@ -77,6 +82,8 @@ function love.load()
     end
 
     staminaBar = ProgressBar("staminabar", 10, 10, 1, 0.5, "right", 24, 7, true)
+    local width, height = getScreenSize()
+    background = Background(width, height / 2)
 end
 
 local function jump()
@@ -159,18 +166,14 @@ function love.update(dt)
 
     Player.score = Player.score + dt * Settings.scoreMultiplier
     staminaBar:update(dt)
-end
-
-local function getScreenSize()
-    return love.graphics.getWidth() / Settings.scale, love.graphics.getHeight() / Settings.scale
+    background:update(dt)
 end
 
 function love.draw()
     love.graphics.setBackgroundColor(Settings.backgroundColor)
     love.graphics.setColor(255, 255, 255)
 
-    love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
-    love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
+    background:draw(Settings.scale)
 
     love.graphics.push()
     love.graphics.scale(Settings.scale)
@@ -191,6 +194,9 @@ function love.draw()
     -- UI
     love.graphics.pop()
     staminaBar:draw()
+
+    love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
+    love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
     -- grey overlay when paused
     if not isRunning then
