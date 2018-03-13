@@ -5,6 +5,7 @@ local layerCount = 4
 local layerDistance = 0.1
 local noiseScale = 0.01
 local noiseScaleIncrease = 0.004
+local highFreqNoiseFactor = 0.3
 local minHeight, maxHeight = 0.1, 0.16
 local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
 local colors = {
@@ -52,7 +53,11 @@ function Background:makeLayer(layer, width, height, depth, bottomColor, topColor
     local gradient = Gradient({bottomColor, topColor}, height)
     local scale = noiseScale + noiseScaleIncrease * scale
     for x = 0, width do
-        local noiseHeight = love.math.noise(x * scale + offset, depth) *  (maxHeight - minHeight) * height + minHeight
+        local lowFreqNoiseValue = love.math.noise(x * scale + offset, depth)
+        local highFreqNoiseValue = love.math.noise(x * 2 * scale + offset * scale, depth * scale)
+        local noiseValue = lowFreqNoiseValue * (1 - highFreqNoiseFactor) + highFreqNoiseValue * highFreqNoiseFactor
+
+        local noiseHeight = noiseValue * (maxHeight - minHeight) * height + minHeight
         local minY = height - noiseHeight - minHeight * height
 
         if height - minY > 0 then
