@@ -8,6 +8,7 @@ local anim8 = require "libs.anim8"
 
 local ProgressBar = require "ui.ProgressBar"
 local Background = require "fx.Background"
+local SoundManager = require "util.SoundManager"
 
 local isRunning = true
 
@@ -32,7 +33,8 @@ local Player = {
     velocityY = 0,
     jumpVelocity = 250,
     gravity = 600,
-    maxFallVelocity = 1400
+    maxFallVelocity = 1400,
+    health = 3,
 }
 
 local Ground = {
@@ -50,7 +52,7 @@ local Obstacles = {
     defaultHeight = 16,
 }
 
-local staminaBar, background
+local staminaBar, background, soundManager
 
 local function getScreenSize(unscaled)
     if unscaled then return love.graphics.getWidth(), love.graphics.getHeight() end
@@ -61,6 +63,8 @@ function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
     love.resize(love.graphics.getDimensions())
+
+    soundManager = SoundManager()
 
     Player.sprite = love.graphics.newImage("sprites/ananas.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
@@ -90,6 +94,7 @@ end
 
 local function jump()
     if Player.canJump then
+        soundManager:play("jump", "random")
         Player.isJumping = true
         Player.canJump = false
         Player.velocityY = -Player.jumpVelocity
@@ -115,6 +120,15 @@ local function gameOver()
     print("Game over! Score: " .. math.floor(Player.score))
 end
 
+local function takeHit()
+    soundManager:play("hit", "random")
+    Player.health = Player.health - 1
+    resetWorld() -- TODO remove obstacle and slow down time instead later
+    if Player.health <= 0 then
+        gameOver()
+    end
+end
+
 function love.update(dt)
     if not isRunning then return end
 
@@ -132,7 +146,7 @@ function love.update(dt)
 
         for i = 1, #collisions do
             if collisions[i].other.isPlayer then
-                gameOver()
+                takeHit()
             end
         end
     end
@@ -162,7 +176,7 @@ function love.update(dt)
             Player.isJumping = false
             Player.velocityY = 0
         elseif collision.other.isObstacle then
-            gameOver()
+            takeHit()
         end
     end
 
