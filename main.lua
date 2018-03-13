@@ -190,6 +190,7 @@ function love.update(dt)
     end
 
     Player.animation:update(dt)
+    Player.frontalGlassesAnimation:update(dt)
     Player.glassesAnimation:update(dt)
     if Player.isJumping then
         Player.animation:pauseAtStart()
@@ -293,8 +294,10 @@ function love.draw()
     love.graphics.pop()
     staminaBar:draw()
     for i = 0, Player.health - 1 do
-        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 70, 10)
-        love.graphics.draw(Player.sprite, Player.glassesQuad, i * (Player.width + 10) + 70, 10)
+        Player.animation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
+        Player.frontalGlassesAnimation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
+--        love.graphics.draw(Player.sprite, Player.healthQuad, )
+--        love.graphics.draw(Player.sprite, Player.glassesQuad, )
     end
 
     love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 60, 20)
