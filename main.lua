@@ -18,6 +18,7 @@ local noise
 if love.system.getOS() == "iOS" or love.system.getOS() == "Android" then
     mobile = true
     Settings.scale = Settings.mobileScale
+    Settings.uiScale = Settings.mobileUiScale
 else
     noise = require "libs.noise"
 end
@@ -27,8 +28,11 @@ local isRunning = true
 local staminaBar, background, soundManager, noiseShader, noiseTimer
 
 local function getScreenSize(unscaled)
-    if unscaled then return love.graphics.getWidth(), love.graphics.getHeight() end
-    return love.graphics.getWidth() / Settings.scale, love.graphics.getHeight() / Settings.scale
+    local scaleX, scaleY = Settings.scale, Settings.scale
+    if unscaled then
+        scaleX, scaleY = Settings.uiScale, Settings.uiScale
+    end
+    return love.graphics.getWidth() / scaleX, love.graphics.getHeight() / scaleY
 end
 
 function love.load()
@@ -291,6 +295,9 @@ function love.draw()
 
     -- UI
     love.graphics.pop()
+    love.graphics.push()
+    love.graphics.scale(Settings.uiScale, Settings.uiScale)
+
     staminaBar:draw()
     for i = 0, Player.health - 1 do
         local x, y = i * (Player.width + 10) + 10, 10
@@ -301,6 +308,8 @@ function love.draw()
     love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 60, 20)
     love.graphics.print(math.floor(Player.score), 20, height - 70)
     love.graphics.print(love.timer.getFPS() .. "FPS", love.graphics.getWidth() - 140, height - 70)
+
+    love.graphics.pop()
 
     -- grey overlay when paused
     if not isRunning then

@@ -1,7 +1,9 @@
 local Settings = {
     debugDraw = false,
     scale = 2,
+    uiScale = 1,
     mobileScale = 8,
+    mobileUiScale = 4,
     groundY = 300,
     backgroundColor = {28, 112, 167},
     backgroundSpeed = 4,
