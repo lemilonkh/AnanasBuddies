@@ -3,7 +3,7 @@ local Gradient = require "fx.Gradient"
 
 local layerCount = 4
 local layerDistance = 0.1
-local noiseScale = 0.03
+local noiseScale = 0.01
 local noiseScaleIncrease = 0.004
 local minHeight, maxHeight = 0.1, 0.30
 local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
@@ -31,7 +31,7 @@ function Background:regenerate(width, height, changeSize)
 
     for i = 1, layerCount do
         local index = layerCount - i + 1
-        local distance = layerDistance * i
+        local distance = layerDistance * i + i
         local color = Gradient:lerpColors(colors[1], colors[2], (i-1) * 1/layerCount)
         local secondColor = Gradient:lerpColors(colors[3], colors[4], (i-1) * 1/layerCount)
         local offset = (self.layers[i] and self.layers[i].offsetX) or 0
