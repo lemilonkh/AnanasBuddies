@@ -267,8 +267,9 @@ function love.draw()
     -- overlay effects
     if not mobile then
         local noiseAlpha = util.fract(staminaBar.value) * Settings.maxNoiseAlpha
+        local greenNoiseScale = Player.stamina + 1
         love.graphics.setColor(50, 200, 70, noiseAlpha)
-        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, noiseTimer)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, greenNoiseScale, greenNoiseScale, noiseTimer)
 
         if Player.stamina > 1 then
             love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
