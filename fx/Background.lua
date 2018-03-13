@@ -26,6 +26,7 @@ end
 function Background:regenerate(width, height, changeSize)
     if changeSize then
         self.layers = {}
+        self.width, self.height = width, height
     end
 
     for i = 1, layerCount do
