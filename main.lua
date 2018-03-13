@@ -305,10 +305,11 @@ function love.draw()
 end
 
 function love.resize(width, height)
+    local previousHeight = Ground.height
     Ground.width = width / Settings.scale
     Ground.height = height * Settings.groundPercentage / Settings.scale
 
-    local distanceY = Ground.height - Ground.y
+    local distanceY = Ground.height - (previousHeight or Ground.height)
     Ground.y = height / Settings.scale - Ground.height
 
     if distanceY == 0 or not bumpWorld then
