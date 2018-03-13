@@ -26,8 +26,8 @@ local Player = {
     score = 0,
     x = 40,
     y = 0,
-    width = 16,
-    height = 32,
+    width = 32,
+    height = 57,
     velocityX = 0,
     velocityY = 0,
     jumpVelocity = 250,
@@ -61,9 +61,9 @@ function love.load()
 
     love.resize(love.graphics.getDimensions())
 
-    Player.sprite = love.graphics.newImage("sprites/pineapple.png")
+    Player.sprite = love.graphics.newImage("sprites/ananas.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
-    Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1)
+    Player.animation = anim8.newAnimation(grid('1-1', 1), 0.1) -- TODO more frames
 
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
