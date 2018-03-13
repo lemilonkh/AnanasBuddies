@@ -68,8 +68,11 @@ function love.load()
     soundManager = SoundManager()
 
     Player.sprite = love.graphics.newImage("sprites/ananas.png")
-    local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
+    local spriteWidth, spriteHeight = Player.sprite:getWidth(), Player.sprite:getHeight()
+    local grid = anim8.newGrid(Player.width, Player.height, spriteWidth, spriteHeight)
     Player.animation = anim8.newAnimation(grid(1, 1, 2, 1, 3, 1, 2, 1), 0.3, "pauseAtEnd") -- TODO more frames
+
+    Player.healthQuad = love.graphics.newQuad(0, 0, Player.width, Player.height, spriteWidth, spriteHeight)
 
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
@@ -218,6 +221,9 @@ function love.draw()
     -- UI
     love.graphics.pop()
     staminaBar:draw()
+    for i = 0, Player.health - 1 do
+        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 10, 10)
+    end
 
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
