@@ -117,7 +117,6 @@ local function resetWorld()
     for i = 1, #Obstacles do
         Obstacles[i].x = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing
     end
-    Player.score = 0
 end
 
 local function gameOver()
@@ -265,6 +264,13 @@ end
 
 function love.keypressed(key)
     if key == "space" then
+        if not isRunning then
+            isRunning = true
+            resetWorld()
+            Player.score = 0
+            return
+        end
+
         jump()
     end
     if key == "escape" then
@@ -285,6 +291,7 @@ function love.mousepressed(x, y, button)
     if not isRunning then
         isRunning = true
         resetWorld()
+        Player.score = 0
         return
     end
 
