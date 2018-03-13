@@ -14,6 +14,7 @@ local SoundManager = require "util.SoundManager"
 local isRunning = true
 
 local Settings = {
+    debugDraw = false,
     scale = 2,
     groundY = 300,
     backgroundColor = {28, 112, 167},
@@ -245,14 +246,18 @@ function love.draw()
         elseif obstacle.sprite then
             love.graphics.draw(obstacle.sprite, obstacle.x, obstacle.y)
         end
-        love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
+        if Settings.debugDraw then
+            love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
+        end
     end
 
     Player.animation:draw(Player.sprite, Player.x, Player.y)
     Player.glassesAnimation:draw(Player.sprite, Player.x, Player.y)
 
-    love.graphics.setColor(255, 0, 0)
-    love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
+    if Settings.debugDraw then
+        love.graphics.setColor(255, 0, 0)
+        love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
+    end
 
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
