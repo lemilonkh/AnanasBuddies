@@ -9,9 +9,9 @@ local highFreqNoiseFactor = 0.2
 local minHeight, maxHeight = 0.1, 0.16
 local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
 local colors = {
-    {93, 164, 88},
+    {0, 60, 90},
     {86, 128, 62},
-    {255, 255, 255}, -- 46, 84, 42
+    {200, 220, 255}, -- 46, 84, 42
     {36, 71, 57},
 
 --    {71, 137, 66},
