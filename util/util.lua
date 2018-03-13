@@ -7,8 +7,8 @@ end
 
 -- rounds num towards 0 (to nearest integer)
 function util.round(num)
-	if num >= 0 then return math.floor(num + .5)
-	else return math.ceil(num - .5) end
+    if num >= 0 then return math.floor(num + .5)
+    else return math.ceil(num - .5) end
 end
 
 -- returns fractional part of float
@@ -18,25 +18,25 @@ function util.fract(number)
 end
 
 function util.random(min, max, precision)
-	local range = max - min
-	local offset = range * math.random()
-	local unrounded = min + offset
+    local range = max - min
+    local offset = range * math.random()
+    local unrounded = min + offset
 
-	if not precision then
-		return unrounded
-	end
+    if not precision then
+        return unrounded
+    end
 
-	local powerOfTen = 10 ^ precision
-	return math.floor(unrounded * powerOfTen + 0.5) / powerOfTen
+    local powerOfTen = 10 ^ precision
+    return math.floor(unrounded * powerOfTen + 0.5) / powerOfTen
 end
 
 -- returns 2D simplex noise in range [min, max]
 -- one dimension is time (measured since the start of the program), the other is the given seed
 function util.timeNoise(min, max, seed)
-	seed = seed or 0
-	local time = love.timer.getTime() - startTime
-	local scaledNoise = love.math.noise(seed, time) * (max - min) + min
-	return scaledNoise
+    seed = seed or 0
+    local time = love.timer.getTime() - startTime
+    local scaledNoise = love.math.noise(seed, time) * (max - min) + min
+    return scaledNoise
 end
 
 function util.rotateVector(x, y, angle)
@@ -47,7 +47,7 @@ end
 
 -- returns a table containing all arguments
 function util.pack(...)
-	return { n = select("#", ...), ... }
+    return { n = select("#", ...), ... }
 end
 
 -- get all keys contained in table (useful for non-contiguous tables, i.e. dictionaries)
@@ -71,28 +71,28 @@ function util.values(tab)
 end
 
 function util.removeValue(tab, value)
-	local n = #tab
+    local n = #tab
 
-	-- remove all occurrences of value in tab
-	for i = 1, n do
-		if tab[i] == value then
-			tab[i] = nil
-		end
-	end
+    -- remove all occurrences of value in tab
+    for i = 1, n do
+        if tab[i] == value then
+            tab[i] = nil
+        end
+    end
 
     -- compact tab by filling up empty indices
-	local j = 0
-	for i = 1, n do
-		if tab[i] ~= nil then
-			j = j + 1
-			tab[j] = tab[i]
-		end
-	end
+    local j = 0
+    for i = 1, n do
+        if tab[i] ~= nil then
+            j = j + 1
+            tab[j] = tab[i]
+        end
+    end
 
     -- remove excess elements at end of tab
-	for i = j + 1, n do
-		tab[i] = nil
-	end
+    for i = j + 1, n do
+        tab[i] = nil
+    end
 end
 
 return util
