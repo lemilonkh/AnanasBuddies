@@ -5,7 +5,7 @@ local layerCount = 4
 local layerDistance = 0.1
 local noiseScale = 0.01
 local noiseScaleIncrease = 0.004
-local minHeight, maxHeight = 0.1, 0.30
+local minHeight, maxHeight = 0.1, 0.16
 local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
 local colors = {
     {93, 164, 88},
