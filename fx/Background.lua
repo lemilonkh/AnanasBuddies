@@ -34,11 +34,11 @@ function Background:makeLayer(layer, width, height, depth, color, scale, offset,
     love.graphics.clear()
     love.graphics.setColor(255, 255, 255) --color)
     local secondColor = {255, 0, 0}
+    local gradient = Gradient({color, secondColor}, height)
     local scale = noiseScale + noiseScaleIncrease * scale
     for x = 0, width do
         local noiseHeight = love.math.noise(x * scale + offset, depth) *  (maxHeight - minHeight) * height + minHeight
         local minY = height - noiseHeight - minHeight * height
-        local gradient = Gradient({color, secondColor}, height - minY)
 
         if height - minY > 0 then
             gradient:draw(x, minY, 1, math.floor(height - minY))
