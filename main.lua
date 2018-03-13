@@ -1,9 +1,12 @@
 -- main.lua
 -- (c) 2018 by Milan Gruner
 
+class = require "libs.30log"
 inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
+
+local ProgressBar = require "ui.ProgressBar"
 
 local isRunning = true
 
@@ -45,6 +48,8 @@ local Obstacles = {
     defaultHeight = 16,
 }
 
+local staminaBar
+
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
@@ -70,6 +75,8 @@ function love.load()
         bumpWorld:add(obstacle, x, y, width, height)
         table.insert(Obstacles, obstacle)
     end
+
+    staminaBar = ProgressBar("staminabar", 10, 10, 1, 0.5, "right", 24, 7, true)
 end
 
 local function resetWorld()
@@ -136,6 +143,7 @@ function love.update(dt)
     end
 
     Player.score = Player.score + dt * Settings.scoreMultiplier
+    staminaBar:update(dt)
 end
 
 local function getScreenSize()
@@ -149,6 +157,7 @@ function love.draw()
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
+    love.graphics.push()
     love.graphics.scale(Settings.scale)
 
     for index, obstacle in ipairs(Obstacles) do
@@ -164,11 +173,15 @@ function love.draw()
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
 
+    -- UI
+    love.graphics.pop()
+    staminaBar:draw()
+
     -- grey overlay when paused
     if not isRunning then
-        love.graphics.setColor(128, 128, 128, 128)
-        love.graphics.rectangle("fill", 0, 0, getScreenSize())
         local width, height = getScreenSize()
+        love.graphics.setColor(128, 128, 128, 128)
+        love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(0, 0, 0)
         love.graphics.printf("Game Over!", 0, height / 2, width, "center")
     end
