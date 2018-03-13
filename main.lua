@@ -6,6 +6,7 @@ inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
 
+local util = require "util.util"
 local ProgressBar = require "ui.ProgressBar"
 local Background = require "fx.Background"
 local SoundManager = require "util.SoundManager"
@@ -146,6 +147,13 @@ local function takeHit()
     end
 end
 
+local function collectPickup(pickup)
+    soundManager:play("pickup", "random")
+    Player.stamina = Player.stamina + Settings.pickupStamina
+    bumpWorld:remove(pickup)
+    util.removeValue(Obstacles, pickup)
+end
+
 function love.update(dt)
     if not isRunning then return end
 
@@ -166,7 +174,7 @@ function love.update(dt)
                 if obstacle.isObstacle then
                     takeHit()
                 elseif obstacle.isPickup then
-                    Player.stamina = Player.stamina + Settings.pickupStamina
+                    collectPickup(obstacle)
                 end
             end
         end
@@ -207,7 +215,7 @@ function love.update(dt)
         elseif collision.other.isObstacle then
             takeHit()
         elseif collision.other.isPickup then
-            Player.stamina = Player.stamina + Settings.pickupStamina
+            collectPickup(collision.other)
         end
     end
 
