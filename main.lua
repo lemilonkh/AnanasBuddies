@@ -280,9 +280,13 @@ function love.draw()
 
     -- overlay effects
     local noiseAlpha = Player.stamina * Settings.maxNoiseAlpha
-    love.graphics.setColor(50, 200, 70, noiseAlpha)
     local width, height = getScreenSize(true)
+    love.graphics.setColor(50, 200, 70, noiseAlpha)
     noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
+    love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
+    noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
+    love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
+    noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
 
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
