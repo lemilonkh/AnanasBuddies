@@ -73,6 +73,12 @@ function love.load()
     end
 end
 
+local function resetWorld()
+    for i = 1, #Obstacles do
+        Obstacles[i].x = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing
+    end
+end
+
 local function gameOver()
     isRunning = false
     print("Game over!")
@@ -87,6 +93,7 @@ function love.update(dt)
 
         if obstacle.x < -obstacle.width then
             obstacle.x = love.graphics.getWidth() / Settings.scale + obstacle.width
+            bumpWorld:update(obstacle, obstacle.x, obstacle.y)
         end
 
         local actualX, actualY, collisions = bumpWorld:move(obstacle, obstacle.x, obstacle.y)
@@ -172,6 +179,12 @@ function love.keypressed(key)
 end
 
 function love.mousepressed(x, y, button)
+    if not isRunning then
+        isRunning = true
+        resetWorld()
+        return
+    end
+
     if Player.canJump then
         Player.isJumping = true
         Player.canJump = false
