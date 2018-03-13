@@ -248,7 +248,7 @@ function love.update(dt)
         end
     end
 
-    Player.score = Player.score + dt * Settings.scoreMultiplier
+    Player.score = Player.score + dt * Settings.scoreMultiplier * math.floor(Player.stamina + 1)
     staminaBar:update(dt)
     background:update(dt, Settings.backgroundSpeed)
 end
