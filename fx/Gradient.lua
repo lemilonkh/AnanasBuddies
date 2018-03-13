@@ -44,15 +44,19 @@ function Gradient:generateColors(colorA, colorB, colorCount)
     local colors = {}
     local t = 0
     for i = 1, colorCount do
-        colors[i] = {
-            colorA[1] * t + colorB[1] * (1-t),
-            colorA[2] * t + colorB[2] * (1-t),
-            colorA[3] * t + colorB[3] * (1-t),
-            (colorA[4] or 255) * t + (colorB[4] or 255) * (1-t)
-        }
+        colors[i] = self:lerpColors(colorA, colorB, t)
         t = t + 1 / colorCount
     end
     return colors
+end
+
+function Gradient:lerpColors(colorA, colorB, t)
+    return {
+        colorA[1] * t + colorB[1] * (1-t),
+        colorA[2] * t + colorB[2] * (1-t),
+        colorA[3] * t + colorB[3] * (1-t),
+        (colorA[4] or 255) * t + (colorB[4] or 255) * (1-t)
+    }
 end
 
 return Gradient

@@ -7,6 +7,16 @@ local noiseScale = 0.03
 local noiseScaleIncrease = 0.004
 local minHeight, maxHeight = 0.1, 0.30
 local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
+local colors = {
+    {93, 164, 88},
+    {86, 128, 62},
+    {46, 84, 42},
+    {36, 71, 57},
+
+--    {71, 137, 66},
+--    {68, 128, 62},
+--    {54, 102, 50}
+}
 
 function Background:init(width, height)
     self.width, self.height = width, height
@@ -17,14 +27,15 @@ function Background:regenerate(width, height)
     for i = 1, layerCount do
         local index = layerCount - i + 1
         local distance = layerDistance * i
-        local color = {i * 32, 255 - i * 32, 128 - i * 32, 128 }
+        local color = Gradient:lerpColors(colors[1], colors[2], (i-1) * 1/layerCount)
+        local secondColor = Gradient:lerpColors(colors[3], colors[4], (i-1) * 1/layerCount)
         local offset = (self.layers[i] and self.layers[i].offsetX) or 0
         local currentMinHeight, currentMaxHeight = minHeight + minHeightIncrease * i, maxHeight + maxHeightIncrease * i
-        self.layers[index] = self:makeLayer(self.layers[index], width, height, distance, color, i, offset, currentMinHeight, currentMaxHeight)
+        self.layers[index] = self:makeLayer(self.layers[index], width, height, distance, color, secondColor, i, offset, currentMinHeight, currentMaxHeight)
     end
 end
 
-function Background:makeLayer(layer, width, height, depth, color, scale, offset, minHeight, maxHeight)
+function Background:makeLayer(layer, width, height, depth, bottomColor, topColor, scale, offset, minHeight, maxHeight)
     if not layer or not layer.canvas then
         layer = {}
         layer.canvas = love.graphics.newCanvas(width, height)
@@ -33,8 +44,7 @@ function Background:makeLayer(layer, width, height, depth, color, scale, offset,
     love.graphics.setCanvas(layer.canvas)
     love.graphics.clear()
     love.graphics.setColor(255, 255, 255) --color)
-    local secondColor = {255, 0, 0}
-    local gradient = Gradient({color, secondColor}, height)
+    local gradient = Gradient({bottomColor, topColor}, height)
     local scale = noiseScale + noiseScaleIncrease * scale
     for x = 0, width do
         local noiseHeight = love.math.noise(x * scale + offset, depth) *  (maxHeight - minHeight) * height + minHeight
