@@ -150,8 +150,10 @@ end
 local function collectPickup(pickup)
     soundManager:play("pickup", "random")
     Player.stamina = Player.stamina + Settings.pickupStamina
-    bumpWorld:remove(pickup)
-    util.removeValue(Obstacles, pickup)
+--    bumpWorld:remove(pickup)
+--    util.removeValue(Obstacles, pickup)
+    pickup.x = love.graphics.getWidth() / Settings.scale + pickup.sprite:getWidth()
+    bumpWorld:update(pickup, pickup.x, pickup.y)
 end
 
 function love.update(dt)
