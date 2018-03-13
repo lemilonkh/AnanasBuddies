@@ -5,12 +5,19 @@ class = require "libs.30log"
 inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
-local noise = require "libs.noise"
 
 local util = require "util.util"
 local ProgressBar = require "ui.ProgressBar"
 local Background = require "fx.Background"
 local SoundManager = require "util.SoundManager"
+
+local mobile = false
+local noise
+if love.system.getOS() == 'iOS' or love.system.getOS() == 'Android' then
+    mobile = true
+else
+    noise = require "libs.noise"
+end
 
 local isRunning = true
 
@@ -70,8 +77,11 @@ end
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
-    noise.init()
-    noiseShader = noise.build_shader("libs/noise.frag", Settings.noiseSeed)
+
+    if not mobile then
+        noise.init()
+        noiseShader = noise.build_shader("libs/noise.frag", Settings.noiseSeed)
+    end
 
     love.resize(love.graphics.getDimensions())
 
@@ -283,15 +293,18 @@ function love.draw()
     end
 
     -- overlay effects
-    local noiseAlpha = staminaBar.value * Settings.maxNoiseAlpha
-    local width, height = getScreenSize(true)
-    love.graphics.setColor(50, 200, 70, noiseAlpha)
-    noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
-    love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
-    noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
-    love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
-    noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
+    if not mobile then
+        local noiseAlpha = staminaBar.value * Settings.maxNoiseAlpha
+        local width, height = getScreenSize(true)
+        love.graphics.setColor(50, 200, 70, noiseAlpha)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
+        love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
+        love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
+    end
 
+    love.graphics.setColor(255, 255, 255)
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
