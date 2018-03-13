@@ -5,7 +5,6 @@ bin/
 *.ini
 .dropbox
 *.love
-*.iml
 .idea/
 =======
 # Compiled Lua sources
