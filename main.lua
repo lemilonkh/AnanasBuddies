@@ -21,7 +21,7 @@ local Settings = {
     backgroundColor = {28, 112, 167},
     backgroundSpeed = 4,
     scoreMultiplier = 1, -- points per second
-    pickupStamina = 0.2,
+    pickupStamina = 0.1,
     noiseSeed = 42,
     maxNoiseAlpha = 128,
 }
@@ -56,6 +56,7 @@ local Obstacles = {
     velocityX = -120,
     spacing = 120,
     count = 2,
+    pickupCount = 20,
     defaultWidth = 16,
     defaultHeight = 16,
 }
@@ -103,12 +104,14 @@ function love.load()
 
     local plantSprite = love.graphics.newImage("sprites/plant.png")
     local width, height = plantSprite:getWidth(), plantSprite:getHeight()
-    local x, y = love.graphics.getWidth() / Settings.scale + (Obstacles.count + 1) * Obstacles.spacing, Ground.y - height
-    local plantObstacle = {
-        x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true
-    }
-    bumpWorld:add(plantObstacle, x, y, width, height)
-    table.insert(Obstacles, plantObstacle)
+    for i = 1, Obstacles.pickupCount do
+        local x, y = love.graphics.getWidth() / Settings.scale + (Obstacles.count + 1) * Obstacles.spacing, Ground.y - height
+        local plantObstacle = {
+            x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true
+        }
+        bumpWorld:add(plantObstacle, x, y, width, height)
+        table.insert(Obstacles, plantObstacle)
+    end
 
     staminaBar = ProgressBar("staminabar", 10, 10, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
