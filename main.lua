@@ -166,7 +166,7 @@ function love.update(dt)
 
     Player.score = Player.score + dt * Settings.scoreMultiplier
     staminaBar:update(dt)
-    background:update(dt)
+    background:update(dt, -Obstacles.velocityX / 10)
 end
 
 function love.draw()
