@@ -332,7 +332,7 @@ function love.resize(width, height)
         return
     end
 
-    Player.y = Player.y + distanceY
+    --Player.y = Player.y + distanceY
     for index, obstacle in ipairs(Obstacles) do
         obstacle.y = obstacle.y + distanceY
         bumpWorld:update(obstacle, obstacle.x, obstacle.y)
