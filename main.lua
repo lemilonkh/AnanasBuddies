@@ -12,7 +12,7 @@ local Background = require "fx.Background"
 local isRunning = true
 
 local Settings = {
-    scale = 4,
+    scale = 2,
     groundY = 300,
     backgroundColor = {28, 112, 167},
     backgroundSpeed = 4,
