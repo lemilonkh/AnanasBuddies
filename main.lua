@@ -10,7 +10,8 @@ local isRunning = true
 local Settings = {
     scale = 4,
     groundY = 300,
-    backgroundColor = {28, 112, 167}
+    backgroundColor = {28, 112, 167},
+    scoreMultiplier = 1, -- points per second
 }
 
 local Player = {
@@ -77,6 +78,7 @@ local function resetWorld()
     for i = 1, #Obstacles do
         Obstacles[i].x = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing
     end
+    Player.score = 0
 end
 
 local function gameOver()
@@ -134,6 +136,8 @@ function love.update(dt)
             gameOver()
         end
     end
+
+    Player.score = Player.score + dt * Settings.scoreMultiplier
 end
 
 local function getScreenSize()
@@ -144,7 +148,7 @@ function love.draw()
     love.graphics.setBackgroundColor(Settings.backgroundColor)
     love.graphics.setColor(255, 255, 255)
 
-    love.graphics.print("Score: " .. Player.score, 10, 10)
+    love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
     love.graphics.scale(Settings.scale)
@@ -170,7 +174,7 @@ function love.draw()
 end
 
 function love.keypressed(key)
-    if key == " " then
+    if key == "space" then
         Player.velocityY = -Player.jumpVelocity
     end
     if key == "escape" then
