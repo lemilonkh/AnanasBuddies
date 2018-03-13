@@ -230,6 +230,8 @@ function love.resize(width, height)
 
     bumpWorld:remove(Ground)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.width, Ground.height)
+
+    background:regenerate(width, height / 2, true)
 end
 
 function love.keypressed(key)

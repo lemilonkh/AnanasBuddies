@@ -1,7 +1,7 @@
 local Background = class "Background"
 local Gradient = require "fx.Gradient"
 
-local layerCount = 5
+local layerCount = 4
 local layerDistance = 0.1
 local noiseScale = 0.03
 local noiseScaleIncrease = 0.004
@@ -23,7 +23,11 @@ function Background:init(width, height)
     self.layers = {}
 end
 
-function Background:regenerate(width, height)
+function Background:regenerate(width, height, changeSize)
+    if changeSize then
+        self.layers = {}
+    end
+
     for i = 1, layerCount do
         local index = layerCount - i + 1
         local distance = layerDistance * i
@@ -43,7 +47,7 @@ function Background:makeLayer(layer, width, height, depth, bottomColor, topColor
 
     love.graphics.setCanvas(layer.canvas)
     love.graphics.clear()
-    love.graphics.setColor(255, 255, 255) --color)
+    love.graphics.setColor(255, 255, 255)
     local gradient = Gradient({bottomColor, topColor}, height)
     local scale = noiseScale + noiseScaleIncrease * scale
     for x = 0, width do
@@ -52,7 +56,6 @@ function Background:makeLayer(layer, width, height, depth, bottomColor, topColor
 
         if height - minY > 0 then
             gradient:draw(x, minY, 1, math.floor(height - minY))
-            --love.graphics.line(x, height, x, minY)
         end
     end
     love.graphics.setCanvas()
