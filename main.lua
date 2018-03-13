@@ -54,9 +54,6 @@ function love.load()
     Player.frontalGlassesAnimation = anim8.newAnimation(grid('1-7', 2), Settings.playerAnimationSpeed) -- , "pauseAtEnd"
     Player.glassesAnimation = anim8.newAnimation(grid('1-7', 3), Settings.playerAnimationSpeed) -- , "pauseAtEnd"
 
-    Player.healthQuad = love.graphics.newQuad(0, 0, Player.width, Player.height, spriteWidth, spriteHeight)
-    Player.glassesQuad = love.graphics.newQuad(0, Player.height, Player.width, Player.height, spriteWidth, spriteHeight)
-
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
@@ -296,8 +293,6 @@ function love.draw()
     for i = 0, Player.health - 1 do
         Player.animation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
         Player.frontalGlassesAnimation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
---        love.graphics.draw(Player.sprite, Player.healthQuad, )
---        love.graphics.draw(Player.sprite, Player.glassesQuad, )
     end
 
     love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 60, 20)
