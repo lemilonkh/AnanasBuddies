@@ -11,6 +11,7 @@ local Settings = {
     maxNoiseAlpha = 128,
     groundPercentage = 0.2, -- height of ground in [0, 1]
     playerAnimationSpeed = 0.1, -- seconds per frame
+    maxPlayerHealth = 5,
 }
 
 return Settings

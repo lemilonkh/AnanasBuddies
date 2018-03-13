@@ -1,3 +1,5 @@
+local Settings = require "data.Settings"
+
 Player = {
     isPlayer = true,
     isJumping = false,
@@ -13,7 +15,7 @@ Player = {
     jumpVelocity = 250,
     gravity = 600,
     maxFallVelocity = 1400,
-    health = 3,
+    health = Settings.maxPlayerHealth,
     stamina = 0,
 }
 
