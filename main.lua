@@ -283,7 +283,7 @@ function love.draw()
     end
 
     -- overlay effects
-    local noiseAlpha = Player.stamina * Settings.maxNoiseAlpha
+    local noiseAlpha = staminaBar.value * Settings.maxNoiseAlpha
     local width, height = getScreenSize(true)
     love.graphics.setColor(50, 200, 70, noiseAlpha)
     noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
