@@ -15,7 +15,7 @@ require "data.Entities"
 
 local mobile = false
 local noise
-if love.system.getOS() == 'iOS' or love.system.getOS() == 'Android' then
+if love.system.getOS() == "iOS" or love.system.getOS() == "Android" then
     mobile = true
 else
     noise = require "libs.noise"
@@ -108,6 +108,13 @@ local function resetWorld()
     for i = 1, #Obstacles do
         Obstacles[i].x = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing
     end
+end
+
+local function resetGame()
+    isRunning = true
+    resetWorld()
+    Player.score = 0
+    Player.stamina = 0
 end
 
 local function gameOver()
@@ -309,9 +316,7 @@ end
 function love.keypressed(key)
     if key == "space" then
         if not isRunning then
-            isRunning = true
-            resetWorld()
-            Player.score = 0
+            resetGame()
             return
         end
 
@@ -333,9 +338,7 @@ end
 
 function love.mousepressed(x, y, button)
     if not isRunning then
-        isRunning = true
-        resetWorld()
-        Player.score = 0
+        resetGame()
         return
     end
 
