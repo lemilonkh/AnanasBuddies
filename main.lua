@@ -79,6 +79,21 @@ function love.load()
     staminaBar = ProgressBar("staminabar", 10, 10, 1, 0.5, "right", 24, 7, true)
 end
 
+local function jump()
+    if Player.canJump then
+        Player.isJumping = true
+        Player.canJump = false
+        Player.velocityY = -Player.jumpVelocity
+    end
+end
+
+local function fallFast()
+    if Player.isJumping then
+        Player.isJumping = false
+        Player.velocityY = Player.velocityY + Player.jumpVelocity
+    end
+end
+
 local function resetWorld()
     for i = 1, #Obstacles do
         Obstacles[i].x = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing
@@ -212,13 +227,19 @@ end
 
 function love.keypressed(key)
     if key == "space" then
-        Player.velocityY = -Player.jumpVelocity
+        jump()
     end
     if key == "escape" then
         love.event.quit()
     end
     if key == "f" then
         love.window.setFullscreen(not love.window.getFullscreen())
+    end
+end
+
+function love.keyreleased(key)
+    if key == "space" then
+        fallFast()
     end
 end
 
@@ -229,16 +250,9 @@ function love.mousepressed(x, y, button)
         return
     end
 
-    if Player.canJump then
-        Player.isJumping = true
-        Player.canJump = false
-        Player.velocityY = -Player.jumpVelocity
-    end
+    jump()
 end
 
 function love.mousereleased(x, y, button)
-    if Player.isJumping then
-        Player.isJumping = false
-        Player.velocityY = Player.velocityY + Player.jumpVelocity
-    end
+    fallFast()
 end
