@@ -52,7 +52,8 @@ local Obstacles = {
 
 local staminaBar, background
 
-local function getScreenSize()
+local function getScreenSize(unscaled)
+    if unscaled then return love.graphics.getWidth(), love.graphics.getHeight() end
     return love.graphics.getWidth() / Settings.scale, love.graphics.getHeight() / Settings.scale
 end
 
@@ -201,7 +202,7 @@ function love.draw()
 
     -- grey overlay when paused
     if not isRunning then
-        local width, height = getScreenSize()
+        local width, height = getScreenSize(true)
         love.graphics.setColor(128, 128, 128, 128)
         love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(0, 0, 0)
