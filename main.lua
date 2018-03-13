@@ -24,6 +24,7 @@ local Player = {
     isPlayer = true,
     isJumping = false,
     canJump = false,
+    hasLanded = true,
     score = 0,
     x = 40,
     y = 0,
@@ -97,6 +98,7 @@ local function jump()
         soundManager:play("jump", "random")
         Player.isJumping = true
         Player.canJump = false
+        Player.hasLanded = false
         Player.velocityY = -Player.jumpVelocity
     end
 end
@@ -116,6 +118,7 @@ local function resetWorld()
 end
 
 local function gameOver()
+    soundManager:play("explosion", "random")
     isRunning = false
     print("Game over! Score: " .. math.floor(Player.score))
 end
@@ -172,6 +175,10 @@ function love.update(dt)
     for i = 1, #collisions do
         local collision = collisions[i]
         if collision.other.isGround then
+            if not Player.hasLanded then
+                Player.hasLanded = true
+                soundManager:play("wobble", "random")
+            end
             Player.canJump = true
             Player.isJumping = false
             Player.velocityY = 0
