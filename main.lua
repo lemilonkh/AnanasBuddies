@@ -43,8 +43,8 @@ local Ground = {
 }
 
 local Obstacles = {
-    velocityX = -80,
-    spacing = 80,
+    velocityX = -120,
+    spacing = 120,
     count = 2,
     defaultWidth = 16,
     defaultHeight = 16,
