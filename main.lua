@@ -105,7 +105,8 @@ function love.load()
     local plantSprite = love.graphics.newImage("sprites/plant.png")
     local width, height = plantSprite:getWidth(), plantSprite:getHeight()
     for i = 1, Obstacles.pickupCount do
-        local x, y = love.graphics.getWidth() / Settings.scale + (Obstacles.count + 1) * Obstacles.spacing, Ground.y - height
+        local x = love.graphics.getWidth() / Settings.scale + Obstacles.count * Obstacles.spacing + i * Obstacles.spacing
+        local y = Ground.y - height
         local plantObstacle = {
             x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true
         }
