@@ -91,6 +91,15 @@ function love.load()
         table.insert(Obstacles, obstacle)
     end
 
+    local plantSprite = love.graphics.newImage("sprites/plant.png")
+    local width, height = plantSprite:getWidth(), plantSprite:getHeight()
+    local x, y = love.graphics.getWidth() / Settings.scale + (Obstacles.count + 1) * Obstacles.spacing, Ground.y - height
+    local plantObstacle = {
+        x = x, y = y, width = width, height = height, sprite = plantSprite, isObstacle = true
+    }
+    bumpWorld:add(plantObstacle, x, y, width, height)
+    table.insert(Obstacles, plantObstacle)
+
     staminaBar = ProgressBar("staminabar", 10, 10, 1, 0.5, "right", 24, 7, true)
     local width, height = getScreenSize()
     background = Background(width, height / 2)
@@ -205,7 +214,11 @@ function love.draw()
     love.graphics.scale(Settings.scale)
 
     for index, obstacle in ipairs(Obstacles) do
-        love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
+        if obstacle.quad then
+            love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
+        elseif obstacle.sprite then
+            love.graphics.draw(obstacle.sprite, obstacle.x, obstacle.y)
+        end
         love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
     end
 
