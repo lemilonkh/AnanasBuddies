@@ -17,6 +17,7 @@ local mobile = false
 local noise
 if love.system.getOS() == "iOS" or love.system.getOS() == "Android" then
     mobile = true
+    Settings.scale = Settings.mobileScale
 else
     noise = require "libs.noise"
 end
