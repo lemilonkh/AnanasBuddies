@@ -18,6 +18,7 @@ local Settings = {
     backgroundColor = {28, 112, 167},
     backgroundSpeed = 4,
     scoreMultiplier = 1, -- points per second
+    pickupStamina = 0.2
 }
 
 local Player = {
@@ -36,6 +37,7 @@ local Player = {
     gravity = 600,
     maxFallVelocity = 1400,
     health = 3,
+    stamina = 0
 }
 
 local Ground = {
@@ -95,12 +97,12 @@ function love.load()
     local width, height = plantSprite:getWidth(), plantSprite:getHeight()
     local x, y = love.graphics.getWidth() / Settings.scale + (Obstacles.count + 1) * Obstacles.spacing, Ground.y - height
     local plantObstacle = {
-        x = x, y = y, width = width, height = height, sprite = plantSprite, isObstacle = true
+        x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true
     }
     bumpWorld:add(plantObstacle, x, y, width, height)
     table.insert(Obstacles, plantObstacle)
 
-    staminaBar = ProgressBar("staminabar", 10, 10, 1, 0.5, "right", 24, 7, true)
+    staminaBar = ProgressBar("staminabar", 10, 10, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
     background = Background(width, height / 2)
 end
@@ -161,9 +163,17 @@ function love.update(dt)
 
         for i = 1, #collisions do
             if collisions[i].other.isPlayer then
-                takeHit()
+                if obstacle.isObstacle then
+                    takeHit()
+                elseif obstacle.isPickup then
+                    Player.stamina = Player.stamina + Settings.pickupStamina
+                end
             end
         end
+    end
+
+    if Player.stamina ~= staminaBar.targetValue then
+        staminaBar:animateToValue(Player.stamina)
     end
 
     Player.animation:update(dt)
@@ -196,6 +206,8 @@ function love.update(dt)
             Player.velocityY = 0
         elseif collision.other.isObstacle then
             takeHit()
+        elseif collision.other.isPickup then
+            Player.stamina = Player.stamina + Settings.pickupStamina
         end
     end
 
