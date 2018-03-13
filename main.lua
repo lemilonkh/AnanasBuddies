@@ -144,6 +144,7 @@ function love.draw()
 
     for index, obstacle in ipairs(Obstacles) do
         love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
+        love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
     end
 
     Player.animation:draw(Player.sprite, Player.x, Player.y)
