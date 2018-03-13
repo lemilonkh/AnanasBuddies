@@ -126,7 +126,7 @@ function love.load()
         table.insert(Obstacles, plantObstacle)
     end
 
-    staminaBar = ProgressBar("staminabar", 70, 10, 1, 0, "right", 24, 7, false)
+    staminaBar = ProgressBar("staminabar", 70, 35, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
     background = Background(width, height / 2)
 end
@@ -309,9 +309,9 @@ function love.draw()
         love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 70, 10)
     end
 
-    love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 50, 00)
-    love.graphics.print(math.floor(Player.score), 10, 10)
-    love.graphics.print(love.timer.getFPS() .. "/S", love.graphics.getWidth() - 100, height - 50)
+    love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 60, 20)
+    love.graphics.print(math.floor(Player.score), 20, 20)
+    love.graphics.print(love.timer.getFPS() .. "FPS", love.graphics.getWidth() - 120, height - 50)
 
     -- grey overlay when paused
     if not isRunning then
