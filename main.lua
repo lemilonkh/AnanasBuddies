@@ -23,7 +23,7 @@ local Settings = {
     scoreMultiplier = 1, -- points per second
     pickupStamina = 0.2,
     noiseSeed = 42,
-    maxNoiseAlpha = 200,
+    maxNoiseAlpha = 128,
 }
 
 local Player = {
@@ -277,14 +277,14 @@ function love.draw()
     -- overlay effects
     local noiseAlpha = Player.stamina * Settings.maxNoiseAlpha
     love.graphics.setColor(50, 200, 70, noiseAlpha)
-    noise.sample(noiseShader, noise.types.simplex2d, getScreenSize(true))
+    local width, height = getScreenSize(true)
+    noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
 
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
     -- grey overlay when paused
     if not isRunning then
-        local width, height = getScreenSize(true)
         love.graphics.setColor(128, 128, 128, 128)
         love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(0, 0, 0)
