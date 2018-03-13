@@ -11,7 +11,7 @@ local minHeightIncrease, maxHeightIncrease = 0.04, 0.08
 local colors = {
     {93, 164, 88},
     {86, 128, 62},
-    {46, 84, 42},
+    {255, 255, 255}, -- 46, 84, 42
     {36, 71, 57},
 
 --    {71, 137, 66},
