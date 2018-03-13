@@ -49,11 +49,13 @@ function love.load()
     Player.sprite = love.graphics.newImage("sprites/ananas.png")
     local spriteWidth, spriteHeight = Player.sprite:getWidth(), Player.sprite:getHeight()
     local grid = anim8.newGrid(Player.width, Player.height, spriteWidth, spriteHeight)
-    Player.animation = anim8.newAnimation(grid('1-7', 1), 0.1) -- , "pauseAtEnd"
-    Player.glassesAnimation = anim8.newAnimation(grid('1-7', 3), 0.1) -- , "pauseAtEnd"
+    local playerAnimationSpeed = 0.1
+    Player.animation = anim8.newAnimation(grid('1-7', 1), playerAnimationSpeed) -- , "pauseAtEnd"
+    Player.frontalGlassesAnimation = anim8.newAnimation(grid('1-7', 2), playerAnimationSpeed) -- , "pauseAtEnd"
+    Player.glassesAnimation = anim8.newAnimation(grid('1-7', 3), playerAnimationSpeed) -- , "pauseAtEnd"
 
     Player.healthQuad = love.graphics.newQuad(0, 0, Player.width, Player.height, spriteWidth, spriteHeight)
-    Player.glassesQuad = love.graphics.newQuad(0, 1 * Player.height, Player.width, Player.height, spriteWidth, spriteHeight)
+    Player.glassesQuad = love.graphics.newQuad(0, Player.height, Player.width, Player.height, spriteWidth, spriteHeight)
 
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
