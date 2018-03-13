@@ -171,10 +171,7 @@ end
 local function collectPickup(pickup)
     soundManager:play("pickup", "random")
     Player.stamina = Player.stamina + Settings.pickupStamina
-    if Player.stamina > 1.0 then
-        -- TODO add combo multiplier
-        Player.stamina = 1.0
-    end
+    -- TODO add combo multiplier
 --    bumpWorld:remove(pickup)
 --    util.removeValue(Obstacles, pickup)
     pickup.x = love.graphics.getWidth() / Settings.scale + pickup.sprite:getWidth()
@@ -257,6 +254,7 @@ end
 function love.draw()
     love.graphics.setBackgroundColor(Settings.backgroundColor)
     love.graphics.setColor(255, 255, 255)
+    local width, height = getScreenSize(true)
 
     background:draw(Settings.scale)
 
@@ -284,14 +282,18 @@ function love.draw()
 
     -- overlay effects
     if not mobile then
-        local noiseAlpha = staminaBar.value * Settings.maxNoiseAlpha
-        local width, height = getScreenSize(true)
+        local noiseAlpha = util.fract(staminaBar.value) * Settings.maxNoiseAlpha
         love.graphics.setColor(50, 200, 70, noiseAlpha)
         noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
-        love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
-        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
-        love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
-        noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
+
+        if Player.stamina > 1 then
+            love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
+        end
+        if Player.stamina > 2 then
+            love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
+        end
     end
 
     love.graphics.setColor(255, 255, 255)

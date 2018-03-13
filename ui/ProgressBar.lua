@@ -1,5 +1,6 @@
 local ProgressBar = class "ProgressBar"
 local Tween = require "libs.tween"
+local util = require "util.util"
 
 local progressBarAnimationSpeed = 3
 
@@ -38,8 +39,8 @@ function ProgressBar:animateToValue(targetValue, tweenFunction)
 
     tweenFunction = tweenFunction or "outQuint"
     self.isAnimating = true
-    self.targetValue = targetValue
-    self.valueTween = Tween.new(progressBarAnimationSpeed, self, {value = targetValue}, tweenFunction)
+    self.targetValue = util.fract(targetValue)
+    self.valueTween = Tween.new(progressBarAnimationSpeed, self, {value = util.fract(targetValue)}, tweenFunction)
 end
 
 -- @param [Float] value in interval [0, 1]
@@ -63,7 +64,7 @@ function ProgressBar:setValue(value, isAnimation)
     else
         widthOffset = self.offsetLeft
     end
-    local quadWidth = math.floor(width * value) + widthOffset
+    local quadWidth = math.floor(width * util.fract(value)) + widthOffset
     self.quad = love.graphics.newQuad(self.fillOffsetX, 0, quadWidth, height, self.fillImage:getDimensions())
 end
 

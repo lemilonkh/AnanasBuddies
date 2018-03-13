@@ -11,6 +11,12 @@ function util.round(num)
 	else return math.ceil(num - .5) end
 end
 
+-- returns fractional part of float
+function util.fract(number)
+    local integral, fractional = math.modf(number)
+    return fractional
+end
+
 function util.random(min, max, precision)
 	local range = max - min
 	local offset = range * math.random()
