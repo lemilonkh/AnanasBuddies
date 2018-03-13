@@ -5,6 +5,8 @@ inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
 
+local isRunning = true
+
 local Settings = {
     scale = 4,
     groundY = 300,
@@ -72,10 +74,13 @@ function love.load()
 end
 
 local function gameOver()
+    isRunning = false
     print("Game over!")
 end
 
 function love.update(dt)
+    if not isRunning then return end
+
     for i = 1, #Obstacles do
         local obstacle = Obstacles[i]
         obstacle.x = obstacle.x + Obstacles.velocityX * dt
@@ -124,6 +129,10 @@ function love.update(dt)
     end
 end
 
+local function getScreenSize()
+    return love.graphics.getWidth() / Settings.scale, love.graphics.getHeight() / Settings.scale
+end
+
 function love.draw()
     love.graphics.setBackgroundColor(Settings.backgroundColor)
     love.graphics.setColor(255, 255, 255)
@@ -144,6 +153,12 @@ function love.draw()
 
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
+
+    -- grey overlay when paused
+    if not isRunning then
+        love.graphics.setColor(128, 128, 128, 128)
+        love.graphics.rectangle("fill", 0, 0, getScreenSize())
+    end
 end
 
 function love.keypressed(key)
