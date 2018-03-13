@@ -48,9 +48,7 @@ local Obstacles = {
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
 
-    Ground.width = love.graphics.getWidth()  / Settings.scale
-    Ground.height = love.graphics.getHeight() / (2 * Settings.scale)
-    Ground.y = Ground.height
+    love.resize(love.graphics.getDimensions())
 
     Player.sprite = love.graphics.newImage("sprites/pineapple.png")
     local grid = anim8.newGrid(Player.width, Player.height, Player.sprite:getWidth(), Player.sprite:getHeight())
@@ -170,7 +168,33 @@ function love.draw()
     if not isRunning then
         love.graphics.setColor(128, 128, 128, 128)
         love.graphics.rectangle("fill", 0, 0, getScreenSize())
+        local width, height = getScreenSize()
+        love.graphics.setColor(0, 0, 0)
+        love.graphics.printf("Game Over!", 0, height / 2, width, "center")
     end
+end
+
+function love.resize(width, height)
+    Ground.width = width / Settings.scale
+    Ground.height = height / (2 * Settings.scale)
+
+    local distanceY = Ground.height - Ground.y
+    Ground.y = Ground.height
+
+    if distanceY == 0 or not bumpWorld then
+        return
+    end
+
+    Player.y = Player.y + distanceY
+    for index, obstacle in ipairs(Obstacles) do
+        obstacle.y = obstacle.y + distanceY
+        bumpWorld:update(obstacle, obstacle.x, obstacle.y)
+    end
+
+    bumpWorld:update(Player, Player.x, Player.y)
+
+    bumpWorld:remove(Ground)
+    bumpWorld:add(Ground, Ground.x, Ground.y, Ground.width, Ground.height)
 end
 
 function love.keypressed(key)
@@ -179,6 +203,9 @@ function love.keypressed(key)
     end
     if key == "escape" then
         love.event.quit()
+    end
+    if key == "f" then
+        love.window.setFullscreen(not love.window.getFullscreen())
     end
 end
 
