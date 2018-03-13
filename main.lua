@@ -15,6 +15,7 @@ local Settings = {
     scale = 4,
     groundY = 300,
     backgroundColor = {28, 112, 167},
+    backgroundSpeed = 4,
     scoreMultiplier = 1, -- points per second
 }
 
@@ -166,7 +167,7 @@ function love.update(dt)
 
     Player.score = Player.score + dt * Settings.scoreMultiplier
     staminaBar:update(dt)
-    background:update(dt, -Obstacles.velocityX / 10)
+    background:update(dt, Settings.backgroundSpeed)
 end
 
 function love.draw()
