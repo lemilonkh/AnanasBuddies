@@ -51,8 +51,8 @@ function love.load()
     local grid = anim8.newGrid(Player.width, Player.height, spriteWidth, spriteHeight)
 
     Player.animation = anim8.newAnimation(grid('1-7', 1), Settings.playerAnimationSpeed) -- , "pauseAtEnd"
-    Player.healthAnimation = anim8.newAnimation(grid('1-4', 1), Settings.playerAnimationSpeed * 2) -- , "pauseAtEnd"
-    Player.frontalGlassesAnimation = anim8.newAnimation(grid('1-4', 2), Settings.playerAnimationSpeed * 2) -- , "pauseAtEnd"
+    Player.healthAnimation = anim8.newAnimation(grid('1-4', 1, '4-1', 1), Settings.playerAnimationSpeed * 2) -- , "pauseAtEnd"
+    Player.frontalGlassesAnimation = anim8.newAnimation(grid('1-4', 2, '4-1', 2), Settings.playerAnimationSpeed * 2) -- , "pauseAtEnd"
     Player.glassesAnimation = anim8.newAnimation(grid('1-7', 3), Settings.playerAnimationSpeed) -- , "pauseAtEnd"
 
     bumpWorld = bump.newWorld()
