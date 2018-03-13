@@ -111,7 +111,7 @@ end
 
 local function gameOver()
     isRunning = false
-    print("Game over!")
+    print("Game over! Score: " .. math.floor(Player.score))
 end
 
 function love.update(dt)
@@ -205,7 +205,7 @@ function love.draw()
         love.graphics.setColor(128, 128, 128, 128)
         love.graphics.rectangle("fill", 0, 0, width, height)
         love.graphics.setColor(0, 0, 0)
-        love.graphics.printf("Game Over!", 0, height / 2, width, "center")
+        love.graphics.printf("Game Over! Score: " .. math.floor(Player.score), 0, height / 2, width, "center")
     end
 end
 
