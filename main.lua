@@ -68,7 +68,7 @@ local Obstacles = {
     defaultHeight = 16,
 }
 
-local staminaBar, background, soundManager, noiseShader
+local staminaBar, background, soundManager, noiseShader, noiseTimer
 
 local function getScreenSize(unscaled)
     if unscaled then return love.graphics.getWidth(), love.graphics.getHeight() end
@@ -83,6 +83,7 @@ function love.load()
     if not mobile then
         noise.init()
         noiseShader = noise.build_shader("libs/noise.frag", Settings.noiseSeed)
+        noiseTimer = 0
     end
 
     love.resize(love.graphics.getDimensions())
@@ -251,6 +252,9 @@ function love.update(dt)
     Player.score = Player.score + dt * Settings.scoreMultiplier * math.floor(Player.stamina + 1)
     staminaBar:update(dt)
     background:update(dt, Settings.backgroundSpeed)
+    if not mobile then
+        noiseTimer = noiseTimer + dt
+    end
 end
 
 function love.draw()
@@ -286,15 +290,15 @@ function love.draw()
     if not mobile then
         local noiseAlpha = util.fract(staminaBar.value) * Settings.maxNoiseAlpha
         love.graphics.setColor(50, 200, 70, noiseAlpha)
-        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, Player.score)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 1, 1, noiseTimer)
 
         if Player.stamina > 1 then
             love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
-            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, Player.score * 2 + 10)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, noiseTimer * 2 + 10)
         end
         if Player.stamina > 2 then
             love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
-            noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, Player.score + 3.14)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, noiseTimer / 2 + 3.14)
         end
     end
 
