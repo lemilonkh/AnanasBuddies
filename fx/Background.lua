@@ -54,7 +54,7 @@ function Background:makeLayer(layer, width, height, depth, bottomColor, topColor
     local scale = noiseScale + noiseScaleIncrease * scale
     for x = 0, width do
         local lowFreqNoiseValue = love.math.noise(x * scale + offset, depth)
-        local highFreqNoiseValue = love.math.noise(x * 2 * scale + offset, depth)
+        local highFreqNoiseValue = love.math.noise(x * scale + offset, depth)
         local noiseValue = lowFreqNoiseValue * (1 - highFreqNoiseFactor) + highFreqNoiseValue * highFreqNoiseFactor
 
         local noiseHeight = noiseValue * (maxHeight - minHeight) * height + minHeight

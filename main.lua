@@ -120,6 +120,7 @@ end
 local function gameOver()
     soundManager:play("explosion", "random")
     isRunning = false
+    Player.health = 3
     print("Game over! Score: " .. math.floor(Player.score))
 end
 
