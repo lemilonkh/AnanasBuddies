@@ -291,13 +291,14 @@ function love.draw()
     love.graphics.pop()
     staminaBar:draw()
     for i = 0, Player.health - 1 do
-        Player.animation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
-        Player.frontalGlassesAnimation:draw(Player.sprite, i * (Player.width + 10) + 70, 10)
+        local x, y = i * (Player.width + 10) + 10, 10
+        Player.animation:draw(Player.sprite, x, y)
+        Player.frontalGlassesAnimation:draw(Player.sprite, x, y)
     end
 
     love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 60, 20)
-    love.graphics.print(math.floor(Player.score), 20, 20)
-    love.graphics.print(love.timer.getFPS() .. "FPS", love.graphics.getWidth() - 120, height - 50)
+    love.graphics.print(math.floor(Player.score), 20, height - 70)
+    love.graphics.print(love.timer.getFPS() .. "FPS", love.graphics.getWidth() - 140, height - 70)
 
     -- grey overlay when paused
     if not isRunning then
