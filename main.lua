@@ -85,7 +85,7 @@ function love.load()
 
     staminaBar = ProgressBar("staminabar", 70, 35, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
-    background = Background(width, height / 2)
+    background = Background(width, height * (1 - Settings.groundPercentage))
 end
 
 local function jump()
@@ -306,10 +306,10 @@ end
 
 function love.resize(width, height)
     Ground.width = width / Settings.scale
-    Ground.height = height / (2 * Settings.scale)
+    Ground.height = height * Settings.groundPercentage / Settings.scale
 
     local distanceY = Ground.height - Ground.y
-    Ground.y = Ground.height
+    Ground.y = height / Settings.scale - Ground.height
 
     if distanceY == 0 or not bumpWorld then
         return
@@ -326,7 +326,7 @@ function love.resize(width, height)
     bumpWorld:remove(Ground)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.width, Ground.height)
 
-    background:regenerate(width, height / 4, true)
+    background:regenerate(width, height * (1 - Settings.groundPercentage) / Settings.scale, true)
 end
 
 function love.keypressed(key)

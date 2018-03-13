@@ -9,6 +9,7 @@ local Settings = {
     pickupStamina = 0.1,
     noiseSeed = 42,
     maxNoiseAlpha = 128,
+    groundPercentage = 0.2, -- height of ground in [0, 1]
 }
 
 return Settings
