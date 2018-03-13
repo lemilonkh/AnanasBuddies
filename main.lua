@@ -5,6 +5,7 @@ class = require "libs.30log"
 inspect = require "libs.inspect"
 local bump = require "libs.bump"
 local anim8 = require "libs.anim8"
+local noise = require "libs.noise"
 
 local util = require "util.util"
 local ProgressBar = require "ui.ProgressBar"
@@ -20,7 +21,9 @@ local Settings = {
     backgroundColor = {28, 112, 167},
     backgroundSpeed = 4,
     scoreMultiplier = 1, -- points per second
-    pickupStamina = 0.2
+    pickupStamina = 0.2,
+    noiseSeed = 42,
+    maxNoiseAlpha = 200,
 }
 
 local Player = {
@@ -57,7 +60,7 @@ local Obstacles = {
     defaultHeight = 16,
 }
 
-local staminaBar, background, soundManager
+local staminaBar, background, soundManager, noiseShader
 
 local function getScreenSize(unscaled)
     if unscaled then return love.graphics.getWidth(), love.graphics.getHeight() end
@@ -66,6 +69,8 @@ end
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+    noise.init()
+    noiseShader = noise.build_shader("libs/noise.frag", Settings.noiseSeed)
 
     love.resize(love.graphics.getDimensions())
 
@@ -268,6 +273,11 @@ function love.draw()
     for i = 0, Player.health - 1 do
         love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 10, 10)
     end
+
+    -- overlay effects
+    local noiseAlpha = Player.stamina * Settings.maxNoiseAlpha
+    love.graphics.setColor(50, 200, 70, noiseAlpha)
+    noise.sample(noiseShader, noise.types.simplex2d, getScreenSize(true))
 
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
