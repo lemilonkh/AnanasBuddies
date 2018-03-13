@@ -77,6 +77,8 @@ end
 
 function love.load()
     love.graphics.setDefaultFilter("nearest", "nearest", 1)
+    local font = love.graphics.newFont("fonts/permanent_marker.ttf", 40)
+    love.graphics.setFont(font)
 
     if not mobile then
         noise.init()
@@ -124,7 +126,7 @@ function love.load()
         table.insert(Obstacles, plantObstacle)
     end
 
-    staminaBar = ProgressBar("staminabar", 50, 10, 1, 0, "right", 24, 7, false)
+    staminaBar = ProgressBar("staminabar", 70, 10, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
     background = Background(width, height / 2)
 end
@@ -304,12 +306,12 @@ function love.draw()
     love.graphics.pop()
     staminaBar:draw()
     for i = 0, Player.health - 1 do
-        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 10, 10)
+        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 70, 10)
     end
 
-    love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 25, 10)
-    love.graphics.print(math.floor(Player.score) .. "s", 10, 10)
-    love.graphics.print(love.timer.getFPS() .. "FPS", love.graphics.getWidth() - 50, 30)
+    love.graphics.print(math.floor(Player.stamina) .. "x", love.graphics.getWidth() - 50, 00)
+    love.graphics.print(math.floor(Player.score), 10, 10)
+    love.graphics.print(love.timer.getFPS() .. "/S", love.graphics.getWidth() - 100, height - 50)
 
     -- grey overlay when paused
     if not isRunning then
