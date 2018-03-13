@@ -272,8 +272,9 @@ function love.draw()
         noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, greenNoiseScale, greenNoiseScale, noiseTimer)
 
         if Player.stamina > 1 then
+            local redNoiseScale = 5 / (Player.stamina + 1)
             love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
-            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, 5, 5, noiseTimer * 2 + 10)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, redNoiseScale, redNoiseScale, noiseTimer * 2 + 10)
         end
         if Player.stamina > 2 then
             love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
