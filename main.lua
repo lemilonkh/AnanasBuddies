@@ -274,9 +274,6 @@ function love.draw()
         end
     end
 
-    Player.animation:draw(Player.sprite, Player.x, Player.y)
-    Player.glassesAnimation:draw(Player.sprite, Player.x, Player.y)
-
     if Settings.debugDraw then
         love.graphics.setColor(255, 0, 0)
         love.graphics.rectangle("line", Player.x, Player.y, Player.width, Player.height)
@@ -284,13 +281,6 @@ function love.draw()
 
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
-
-    -- UI
-    love.graphics.pop()
-    staminaBar:draw()
-    for i = 0, Player.health - 1 do
-        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 10, 10)
-    end
 
     -- overlay effects
     if not mobile then
@@ -305,6 +295,16 @@ function love.draw()
     end
 
     love.graphics.setColor(255, 255, 255)
+    Player.animation:draw(Player.sprite, Player.x, Player.y)
+    Player.glassesAnimation:draw(Player.sprite, Player.x, Player.y)
+
+    -- UI
+    love.graphics.pop()
+    staminaBar:draw()
+    for i = 0, Player.health - 1 do
+        love.graphics.draw(Player.sprite, Player.healthQuad, i * (Player.width + 10) + 10, 10)
+    end
+
     love.graphics.print("Score: " .. math.floor(Player.score), 10, 10)
     love.graphics.print("FPS: " .. love.timer.getFPS(), love.graphics.getWidth() - 55, 10)
 
