@@ -95,4 +95,13 @@ function util.removeValue(tab, value)
     end
 end
 
+
+function util.clearAllEqualValues(tab, value)
+    for i = 1, #tab do
+        if tab[i] == value then
+            tab[i] = nil
+        end
+    end
+end
+
 return util

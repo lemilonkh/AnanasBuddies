@@ -64,7 +64,7 @@ function love.load()
         local width, height = Obstacles.defaultWidth, Obstacles.defaultHeight
         local x, y = love.graphics.getWidth() / Settings.scale + i * Obstacles.spacing, Ground.y - height
         local obstacle = {
-            x = x, y = y, width = width, height = height, quad = quad, isObstacle = true
+            x = x, y = y, width = width, height = height, quad = quad, isObstacle = true, index = #Obstacles + 1
         }
         bumpWorld:add(obstacle, x, y, width, height)
         table.insert(Obstacles, obstacle)
@@ -76,7 +76,7 @@ function love.load()
         local x = love.graphics.getWidth() / Settings.scale + Obstacles.count * Obstacles.spacing + i * Obstacles.spacing
         local y = Ground.y - height
         local plantObstacle = {
-            x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true
+            x = x, y = y, width = width, height = height, sprite = plantSprite, isPickup = true, index = #Obstacles + 1
         }
         bumpWorld:add(plantObstacle, x, y, width, height)
         table.insert(Obstacles, plantObstacle)
@@ -110,6 +110,15 @@ local function resetWorld()
     end
 end
 
+local function removeObstacle(obstacle)
+    bumpWorld:remove(obstacle)
+    if Obstacles[obstacle.index] == obstacle then
+        Obstacles[obstacle.index] = nil
+    end
+    --util.clearAllEqualValues(Obstacles, obstacle)
+    --util.removeValue(Obstacles, obstacle)
+end
+
 local function resetGame()
     isRunning = true
     resetWorld()
@@ -124,10 +133,11 @@ local function gameOver()
     print("Game over! Score: " .. math.floor(Player.score))
 end
 
-local function takeHit()
+local function takeHit(obstacle)
     soundManager:play("hit", "random")
     Player.health = Player.health - 1
-    resetWorld() -- TODO remove obstacle and slow down time instead later
+    -- TODO slow down time
+    removeObstacle(obstacle)
     if Player.health <= 0 then
         gameOver()
     end
@@ -148,22 +158,24 @@ function love.update(dt)
 
     for i = 1, #Obstacles do
         local obstacle = Obstacles[i]
-        obstacle.x = obstacle.x + Obstacles.velocityX * dt
+        if obstacle then
+            obstacle.x = obstacle.x + Obstacles.velocityX * dt
 
-        if obstacle.x < -obstacle.width then
-            obstacle.x = love.graphics.getWidth() / Settings.scale + obstacle.width
-            bumpWorld:update(obstacle, obstacle.x, obstacle.y)
-        end
+            if obstacle.x < -obstacle.width then
+                obstacle.x = love.graphics.getWidth() / Settings.scale + obstacle.width
+                bumpWorld:update(obstacle, obstacle.x, obstacle.y)
+            end
 
-        local actualX, actualY, collisions = bumpWorld:move(obstacle, obstacle.x, obstacle.y)
-        obstacle.x, obstacle.y = actualX, actualY
+            local actualX, actualY, collisions = bumpWorld:move(obstacle, obstacle.x, obstacle.y)
+            obstacle.x, obstacle.y = actualX, actualY
 
-        for i = 1, #collisions do
-            if collisions[i].other.isPlayer then
-                if obstacle.isObstacle then
-                    takeHit()
-                elseif obstacle.isPickup then
-                    collectPickup(obstacle)
+            for i = 1, #collisions do
+                if collisions[i].other.isPlayer then
+                    if obstacle.isObstacle then
+                        takeHit(obstacle)
+                    elseif obstacle.isPickup then
+                        collectPickup(obstacle)
+                    end
                 end
             end
         end
@@ -205,7 +217,7 @@ function love.update(dt)
             Player.isJumping = false
             Player.velocityY = 0
         elseif collision.other.isObstacle then
-            takeHit()
+            takeHit(collision.other)
         elseif collision.other.isPickup then
             collectPickup(collision.other)
         end
@@ -229,14 +241,17 @@ function love.draw()
     love.graphics.push()
     love.graphics.scale(Settings.scale)
 
-    for index, obstacle in ipairs(Obstacles) do
-        if obstacle.quad then
-            love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
-        elseif obstacle.sprite then
-            love.graphics.draw(obstacle.sprite, obstacle.x, obstacle.y)
-        end
-        if Settings.debugDraw then
-            love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
+    for i = 1, #Obstacles do
+        local obstacle = Obstacles[i]
+        if obstacle then
+            if obstacle.quad then
+                love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
+            elseif obstacle.sprite then
+                love.graphics.draw(obstacle.sprite, obstacle.x, obstacle.y)
+            end
+            if Settings.debugDraw then
+                love.graphics.rectangle("line", obstacle.x, obstacle.y, obstacle.width, obstacle.height)
+            end
         end
     end
 
