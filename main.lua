@@ -255,6 +255,24 @@ function love.draw()
     love.graphics.setColor(255, 255, 255)
     local width, height = getScreenSize(true)
 
+    -- background noise effects
+    if not mobile then
+        local noiseAlpha = util.fract(staminaBar.value) * Settings.maxNoiseAlpha
+        local greenNoiseScale = Player.stamina + 1
+        love.graphics.setColor(50, 200, 70, noiseAlpha)
+        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, greenNoiseScale, greenNoiseScale, noiseTimer)
+
+        if Player.stamina > 1 then
+            local redNoiseScale = 5 / (Player.stamina + 1)
+            love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, redNoiseScale, redNoiseScale, noiseTimer * 2 + 10)
+        end
+        if Player.stamina > 2 then
+            love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
+            noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, noiseTimer / 2 + 3.14)
+        end
+    end
+
     background:draw(Settings.scale)
 
     love.graphics.push()
@@ -283,24 +301,6 @@ function love.draw()
 
     love.graphics.setColor(Ground.color)
     love.graphics.rectangle("fill", Ground.x, Ground.y, Ground.width, Ground.height)
-
-    -- overlay effects
-    if not mobile then
-        local noiseAlpha = util.fract(staminaBar.value) * Settings.maxNoiseAlpha
-        local greenNoiseScale = Player.stamina + 1
-        love.graphics.setColor(50, 200, 70, noiseAlpha)
-        noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, greenNoiseScale, greenNoiseScale, noiseTimer)
-
-        if Player.stamina > 1 then
-            local redNoiseScale = 5 / (Player.stamina + 1)
-            love.graphics.setColor(255, 0, 50, noiseAlpha / 5)
-            noise.sample(noiseShader, noise.types.simplex3d, width, height, 0, 0, redNoiseScale, redNoiseScale, noiseTimer * 2 + 10)
-        end
-        if Player.stamina > 2 then
-            love.graphics.setColor(157, 59, 75, noiseAlpha + 20)
-            noise.sample(noiseShader, noise.types.simplex3d, width, height, 5, 5, 7, 7, noiseTimer / 2 + 3.14)
-        end
-    end
 
     love.graphics.setColor(255, 255, 255)
     Player.animation:draw(Player.sprite, Player.x, Player.y)
