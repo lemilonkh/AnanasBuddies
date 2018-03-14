@@ -19,6 +19,18 @@ Player = {
     stamina = 0,
 }
 
+Banana = {
+    isEnemy = true,
+    x = 500,
+    y = 0,
+    width = 32,
+    height = 64,
+    velocityX = -10,
+    velocityY = 0,
+    health = 3,
+    stamina = 0,
+}
+
 Ground = {
     isGround = true,
     color = {247, 160, 59},

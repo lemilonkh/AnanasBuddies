@@ -59,6 +59,11 @@ function love.load()
     Player.frontalGlassesAnimation = anim8.newAnimation(grid('1-4', 2, '4-1', 2), Settings.playerAnimationSpeed * 2) -- , "pauseAtEnd"
     Player.glassesAnimation = anim8.newAnimation(grid('1-7', 3), Settings.playerAnimationSpeed) -- , "pauseAtEnd"
 
+    Banana.sprite = love.graphics.newImage("sprites/banana.png")
+    spriteWidth, spriteHeight = Banana.sprite:getWidth(), Banana.sprite:getHeight()
+    grid = anim8.newGrid(Banana.width, Banana.height, spriteWidth, spriteHeight)
+    Banana.animation = anim8.newAnimation(grid('1-5', 1, '4-2', 1), Settings.playerAnimationSpeed)
+
     bumpWorld = bump.newWorld()
     bumpWorld:add(Player, Player.x, Player.y, Player.width, Player.height)
     bumpWorld:add(Ground, Ground.x, Ground.y, Ground.height, Ground.width)
@@ -87,6 +92,10 @@ function love.load()
         bumpWorld:add(plantObstacle, x, y, width, height)
         table.insert(Obstacles, plantObstacle)
     end
+
+    bumpWorld:add(Banana, Banana.x, Banana.y, Banana.width, Banana.height)
+    Banana.index = #Obstacles + 1
+    table.insert(Obstacles, Banana)
 
     staminaBar = ProgressBar("staminabar", 70, 35, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
@@ -195,6 +204,8 @@ function love.update(dt)
     Player.healthAnimation:update(dt)
     Player.frontalGlassesAnimation:update(dt)
     Player.glassesAnimation:update(dt)
+    Banana.animation:update(dt)
+
     if Player.isJumping then
         Player.animation:pauseAtStart()
         Player.glassesAnimation:pauseAtStart()
@@ -252,7 +263,9 @@ function love.draw()
     for i = 1, #Obstacles do
         local obstacle = Obstacles[i]
         if obstacle then
-            if obstacle.quad then
+            if obstacle.animation then
+                obstacle.animation:draw(obstacle.sprite, obstacle.x, obstacle.y)
+            elseif obstacle.quad then
                 love.graphics.draw(Obstacles.sprite, obstacle.quad, obstacle.x, obstacle.y)
             elseif obstacle.sprite then
                 love.graphics.draw(obstacle.sprite, obstacle.x, obstacle.y)
