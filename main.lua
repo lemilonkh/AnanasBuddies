@@ -273,6 +273,7 @@ function love.draw()
         end
     end
 
+    love.graphics.setColor(255, 255, 255)
     background:draw(Settings.scale)
 
     love.graphics.push()
