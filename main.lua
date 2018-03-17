@@ -100,6 +100,8 @@ function love.load()
     staminaBar = ProgressBar("staminabar", 70, 35, 1, 0, "right", 24, 7, false)
     local width, height = getScreenSize()
     background = Background(width, height * (1 - Settings.groundPercentage))
+
+    soundManager:playMusic(1)
 end
 
 local function jump()
